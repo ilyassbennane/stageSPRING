@@ -18,7 +18,6 @@ import com.ramadan.api.entity.agence.Agency;
 import com.ramadan.api.entity.agence.Sector;
 
 public interface IAddressAgencyMapperService {
-    Page<AddressAgencyResponseDto> convertToResponseDto(Page<Address> addresses);
   
     
 AdresseAgency convertRequestSaveDtoToEntity(AddressAgencyRequestDto AdresseAgencyDto);
@@ -30,4 +29,7 @@ AddressAgencyResponseDto convertEntityToDto(AdresseAgency oAdresseAgency);
 	List<AddressAgencyResponseDto> convertListToListDto(final Collection<AdresseAgency> entityList);
 	
 	 List<AdresseAgency> mapAddresses(List<AddressAgencyRequestDto> adresseAgencyDtos, Agency agence);
+
+
+	Page<AddressAgencyResponseDto> convertToResponseDto(Page<AdresseAgency> addresses);
 }

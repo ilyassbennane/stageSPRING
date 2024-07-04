@@ -25,23 +25,23 @@ import com.ramadan.api.repository.agence.SecteurRepository;
 public class AganceMapperService implements IAganceMapperService {
 
     private final ModelMapper modelMapper;
-    
     private final AdresseAgencyRepository adresseAgencyRepository;
     private final PhoneAgenceRepository phoneAgencyRepository;
     private final AddressAgencyMapperService addressAgencyMapperService;
     private final PhoneAgencyMapperService phoneAgencyMapperService;
+
     @Autowired
     private SecteurRepository sectorRepository;
 
-
     @Autowired
-    public AganceMapperService(ModelMapper modelMapper,PhoneAgencyMapperService phoneAgencyMapperService,AddressAgencyMapperService addressAgencyMapperService, AdresseAgencyRepository adresseAgencyRepository, PhoneAgenceRepository phoneAgencyRepository) {
+    public AganceMapperService(ModelMapper modelMapper, PhoneAgencyMapperService phoneAgencyMapperService,
+            AddressAgencyMapperService addressAgencyMapperService, AdresseAgencyRepository adresseAgencyRepository,
+            PhoneAgenceRepository phoneAgencyRepository) {
         this.modelMapper = modelMapper;
         this.adresseAgencyRepository = adresseAgencyRepository;
         this.phoneAgencyRepository = phoneAgencyRepository;
-        this.addressAgencyMapperService=addressAgencyMapperService;
-        this.phoneAgencyMapperService=phoneAgencyMapperService;
-        
+        this.addressAgencyMapperService = addressAgencyMapperService;
+        this.phoneAgencyMapperService = phoneAgencyMapperService;
     }
 
     @Override
@@ -67,12 +67,13 @@ public class AganceMapperService implements IAganceMapperService {
     @Override
     public AgenceResponseDto convertEntityToDto(Agency agency) {
         AgenceResponseDto dto = modelMapper.map(agency, AgenceResponseDto.class);
-        
-        // Find the main address and phone
+
         AdresseAgency mainAddress = adresseAgencyRepository.findByAgencyUuidAndIsMainTrue(agency.getUuid());
         PhoneAgency mainPhone = phoneAgencyRepository.findByAgencyUuidAndIsMainTrue(agency.getUuid());
-        AddressAgencyResponseDto oMainAddressDto=addressAgencyMapperService.convertEntityToDto(mainAddress);
-        PhoneAgencyResponseDto oMainPhoneDto=phoneAgencyMapperService.convertEntityToDto(mainPhone);
+
+        AddressAgencyResponseDto oMainAddressDto = addressAgencyMapperService.convertEntityToDto(mainAddress);
+        PhoneAgencyResponseDto oMainPhoneDto = phoneAgencyMapperService.convertEntityToDto(mainPhone);
+
         dto.setMainAddress(oMainAddressDto);
         dto.setMainPhone(oMainPhoneDto);
         int sectorCount = sectorRepository.countByAgencyId(agency.getId());
@@ -80,10 +81,11 @@ public class AganceMapperService implements IAganceMapperService {
 
         return dto;
     }
+
     @Override
     public List<AgenceResponseDto> convertListToListDto(Collection<Agency> entityList) {
         return entityList.stream()
-                         .map(this::convertEntityToDto)
-                         .collect(Collectors.toList());
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
     }
 }

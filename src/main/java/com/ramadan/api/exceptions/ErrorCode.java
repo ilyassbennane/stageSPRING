@@ -44,13 +44,14 @@ public enum ErrorCode {
 
 	AS064("Agency Uuid cannot be null or contains only spaces"),
 	AC099("Costumer Uuid cannot be null or contains only spaces"),
+	ASSS("Depot Uuid cannot be null or contains only spaces"),
 
 	P001Cs("this costumer doesn't have any emails"),
 	P0002("Email Not found for this costumer"),
 	E0010("Email Not Found for this costumer"),
 	AS0000("No address found for the costumer"),
 	
-	F000("family uuid cannot be null or contains only spaces"), AS065("Agency Not Found"),
+	F000("family uuid cannot be null or contains only spaces"), AS065("Agency Not Found"),AS099("Deposit not found"),
 
 	P001B("this agency doesn't have any phones"), P001C("this costumer doesn't have any phones"),
 	B002("brand Uuid cannot be null or contains only spaces"), B006("Brand Uuid cannot be null"),

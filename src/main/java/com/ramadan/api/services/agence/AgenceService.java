@@ -226,10 +226,7 @@ public class AgenceService implements IAgenceService {
 	@Override
 	public AgenceResponseDto addAddressToAgence(String agencyUuid, AddressAgencyRequestDto addressDto)
 			throws APIErrorException {
-		Agency agency = agenceRepository.findByUuid(agencyUuid);
-		if (Objects.isNull(agency)) {
-			throw new APIErrorException(ErrorCode.AS065);
-		}
+		Agency agency = checkAgenceUuid(agencyUuid);
 
 		// Get the list of addresses for the agency
 		List<AdresseAgency> addresses = adresseAgencyRepository.findByAgency(agency);
@@ -396,114 +393,106 @@ public class AgenceService implements IAgenceService {
 //    }
 
 	@Override
-	public AgenceResponseDto updateEntity(String uuid, AgenceUpdateDto requestDto) throws ApiKeyException {
-		Agency existingEntity = agenceRepository.findByUuid(uuid);
-		if (existingEntity == null) {
-			throw new ApiKeyException(ErrorCode.AS065);
-		} else {
+	public AgenceResponseDto updateEntity(String uuid, AgenceUpdateDto requestDto) throws APIErrorException {
+		Agency existingEntity = checkAgenceUuid(uuid);
 
-			if (requestDto.getDescription() != null && !requestDto.getDescription().isEmpty()) {
-				existingEntity.setDescription(requestDto.getDescription());
-			}
-			if (requestDto.getCnss() != null && !requestDto.getCnss().isEmpty()) {
-				existingEntity.setCnss(requestDto.getCnss());
-			}
-			if (requestDto.getName() != null && !requestDto.getName().isEmpty()) {
-				existingEntity.setName(requestDto.getName());
-			}
-			if (requestDto.getCapital() != null && !requestDto.getCapital().isEmpty()) {
-				existingEntity.setCapital(requestDto.getCapital());
-			}
+		if (requestDto.getDescription() != null && !requestDto.getDescription().isEmpty()) {
+			existingEntity.setDescription(requestDto.getDescription());
+		}
+		if (requestDto.getCnss() != null && !requestDto.getCnss().isEmpty()) {
+			existingEntity.setCnss(requestDto.getCnss());
+		}
+		if (requestDto.getName() != null && !requestDto.getName().isEmpty()) {
+			existingEntity.setName(requestDto.getName());
+		}
+		if (requestDto.getCapital() != null && !requestDto.getCapital().isEmpty()) {
+			existingEntity.setCapital(requestDto.getCapital());
+		}
 //			if (requestDto.getFax() != null && !requestDto.getFax().isEmpty()) {
 //				existingEntity.setFax(requestDto.getFax());
 //			}
 //			if (requestDto.getPattente() != null && !requestDto.getPattente().isEmpty()) {
 //				existingEntity.setPattente(requestDto.getPattente());
 //			}
-			if (requestDto.getRang() != null) {
-				existingEntity.setRang(requestDto.getRang());
-			}
+		if (requestDto.getRang() != null) {
+			existingEntity.setRang(requestDto.getRang());
+		}
 //			if (requestDto.getTelephone() != null && !requestDto.getTelephone().isEmpty()) {
 //				existingEntity.setTelephone(requestDto.getTelephone());
 //			}
-			if (requestDto.getRegistreCommercial() != null && !requestDto.getRegistreCommercial().isEmpty()) {
-				existingEntity.setRegistreCommercial(requestDto.getRegistreCommercial());
-			}
-			if (requestDto.getIdentifiantFiscal() != null && !requestDto.getIdentifiantFiscal().isEmpty()) {
-				existingEntity.setIdentifiantFiscal(requestDto.getIdentifiantFiscal());
-			}
-			if (requestDto.getTravauxPublic() != null && !requestDto.getTravauxPublic().isEmpty()) {
-				existingEntity.setTravauxPublic(requestDto.getTravauxPublic());
-			}
-
-			if (requestDto.getCodeVille() != null && !requestDto.getCodeVille().isEmpty()) {
-				existingEntity.setCodeVille(requestDto.getCodeVille());
-			}
-
-			if (requestDto.getWeb() != null && !requestDto.getWeb().isEmpty()) {
-				existingEntity.setWeb(requestDto.getWeb());
-			}
-			Agency updatedEntity = agenceRepository.save(existingEntity);
-			return agenceResponseMapper.convertToDto(updatedEntity, AgenceResponseDto.class);
+		if (requestDto.getRegistreCommercial() != null && !requestDto.getRegistreCommercial().isEmpty()) {
+			existingEntity.setRegistreCommercial(requestDto.getRegistreCommercial());
 		}
+		if (requestDto.getIdentifiantFiscal() != null && !requestDto.getIdentifiantFiscal().isEmpty()) {
+			existingEntity.setIdentifiantFiscal(requestDto.getIdentifiantFiscal());
+		}
+		if (requestDto.getTravauxPublic() != null && !requestDto.getTravauxPublic().isEmpty()) {
+			existingEntity.setTravauxPublic(requestDto.getTravauxPublic());
+		}
+
+		if (requestDto.getCodeVille() != null && !requestDto.getCodeVille().isEmpty()) {
+			existingEntity.setCodeVille(requestDto.getCodeVille());
+		}
+
+		if (requestDto.getWeb() != null && !requestDto.getWeb().isEmpty()) {
+			existingEntity.setWeb(requestDto.getWeb());
+		}
+		Agency updatedEntity = agenceRepository.save(existingEntity);
+		return agenceResponseMapper.convertToDto(updatedEntity, AgenceResponseDto.class);
 	}
 
 	@Override
 	public void deleteAgence(String uuid) throws APIErrorException {
-		Agency agence = agenceRepository.findByUuid(uuid);
-		if (agence != null) {
-			agence.setDelete(true);
+		Agency agence = checkAgenceUuid(uuid);
+		agence.setDelete(true);
 
-			agenceRepository.save(agence);
-			List<AdresseAgency> addressAgencies = adresseAgencyRepository.findByAgency(agence);
-			List<PhoneAgency> phoneAgencies = phoneAgenceRepository.findByAgency(agence);
+		agenceRepository.save(agence);
+		List<AdresseAgency> addressAgencies = adresseAgencyRepository.findByAgency(agence);
+		List<PhoneAgency> phoneAgencies = phoneAgenceRepository.findByAgency(agence);
 
-			for (AdresseAgency addressAgency : addressAgencies) {
-				addressAgency.setDelete(true);
-				adresseAgencyRepository.save(addressAgency);
-			}
-			for (PhoneAgency phoneAgency : phoneAgencies) {
-				phoneAgency.setDelete(true);
-				phoneAgenceRepository.save(phoneAgency);
-			}
-		} else {
-			throw new APIErrorException(ErrorCode.A001);
+		for (AdresseAgency addressAgency : addressAgencies) {
+			addressAgency.setDelete(true);
+			adresseAgencyRepository.save(addressAgency);
+		}
+		for (PhoneAgency phoneAgency : phoneAgencies) {
+			phoneAgency.setDelete(true);
+			phoneAgenceRepository.save(phoneAgency);
 		}
 	}
 
 	@Override
 	public Map<String, Object> search(AgenceFilterRequestDto searchRequestDto, int page, int size, String[] sort)
-	        throws APIErrorException {
+			throws APIErrorException {
 
-	    User userConnected = IkeycloakService.getUserConnecter();
-	    String companyUuid = userConnected.getCompany().getUuid();
-	    Company company = companyService.checkCompanyUuid(companyUuid);
-	    List<Order> orders = Utils.getListOrderBySort(sort);
-	    Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
+		User userConnected = IkeycloakService.getUserConnecter();
+		String companyUuid = userConnected.getCompany().getUuid();
+		Company company = companyService.checkCompanyUuid(companyUuid);
+		List<Order> orders = Utils.getListOrderBySort(sort);
+		Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
 
-	    Page<Agency> pAgences;
-	    AgenceSpecification companySpecification = new AgenceSpecification(companyUuid);
+		Page<Agency> pAgences;
+		AgenceSpecification companySpecification = new AgenceSpecification(companyUuid);
 
-	    if (searchRequestDto != null) {
-	        AgenceSpecification searchSpecification = new AgenceSpecification(searchRequestDto);
-	        pAgences = agenceRepository.findAll(Specification.where(companySpecification).and(searchSpecification), pageable);
-	    } else {
-	        pAgences = agenceRepository.findAll(Specification.where(companySpecification), pageable);
-	    }
+		if (searchRequestDto != null) {
+			AgenceSpecification searchSpecification = new AgenceSpecification(searchRequestDto);
+			pAgences = agenceRepository.findAll(Specification.where(companySpecification).and(searchSpecification),
+					pageable);
+		} else {
+			pAgences = agenceRepository.findAll(Specification.where(companySpecification), pageable);
+		}
 
-	    List<Agency> lAgences = pAgences.getContent();
-	    List<AgenceResponseDto> lAgenceDto = lAgences.stream().map(agenceMapperService::convertEntityToDto)
-	            .collect(Collectors.toList());
+		List<Agency> lAgences = pAgences.getContent();
+		List<AgenceResponseDto> lAgenceDto = lAgences.stream().map(agenceMapperService::convertEntityToDto)
+				.collect(Collectors.toList());
 
-	    Map<String, Object> lAgencesMap = new HashMap<>();
-	    lAgencesMap.put("result", lAgenceDto);
-	    lAgencesMap.put("currentPage", pAgences.getNumber());
-	    lAgencesMap.put("totalItems", pAgences.getTotalElements());
-	    lAgencesMap.put("totalPages", pAgences.getTotalPages());
+		Map<String, Object> lAgencesMap = new HashMap<>();
+		lAgencesMap.put("result", lAgenceDto);
+		lAgencesMap.put("currentPage", pAgences.getNumber());
+		lAgencesMap.put("totalItems", pAgences.getTotalElements());
+		lAgencesMap.put("totalPages", pAgences.getTotalPages());
 
-	    return lAgencesMap;
+		return lAgencesMap;
 	}
-	
 
 	@Override
 	public Agency checkAgenceUuid(String uuid) throws APIErrorException {

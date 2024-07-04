@@ -82,7 +82,7 @@ public class AgencyController {
 	public ResponseEntity<AgenceResponseDto> addAddressToAgence(@PathVariable String uuid,
 			@RequestBody AddressAgencyRequestDto addressDto) throws APIErrorException {
 		AgenceResponseDto responseDto = agenceService.addAddressToAgence(uuid, addressDto);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(responseDto);
 	}
 
 	@Operation(summary = "Set Main Address", description = "Main Address REST API to Set Main Address")
@@ -90,7 +90,7 @@ public class AgencyController {
 	@PostMapping("/addresses/{uuid}/set-main")
 	public ResponseEntity<AgenceResponseDto> setMainAddress(@PathVariable String uuid) throws APIErrorException {
 		AgenceResponseDto responseDto = agenceService.setMainAddress(uuid);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(responseDto);
 	}
 
 	@Operation(summary = "Get Addresses Agency", description = "Address Agency REST API to Get addresses of an agency")
@@ -127,15 +127,6 @@ public class AgencyController {
 	public ResponseEntity<AgenceResponseDto> getAgenceByUuid(@PathVariable String uuid) throws APIErrorException {
 		// Placeholder
 		return ResponseEntity.ok(agenceService.findByUuid(uuid));
-	}
-
-	@Operation(summary = "Delete Agency by its uuid", description = "Delete Agency REST API is used to delete a particular Agency from the database")
-	@ApiOperation(value = "Delete an agence by UUID", notes = "Delete an agence by providing its UUID.")
-	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "Agence deleted successfully"), })
-	@DeleteMapping("/{uuid}")
-	public ResponseEntity<Void> deleteAgence(@PathVariable String uuid) throws APIErrorException {
-		agenceService.deleteAgence(uuid);
-		return ResponseEntity.noContent().build();
 	}
 
 

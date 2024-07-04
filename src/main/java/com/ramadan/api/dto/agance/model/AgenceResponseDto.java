@@ -68,5 +68,6 @@ public class AgenceResponseDto {
     private AddressAgencyResponseDto mainAddress;
     
     private PhoneAgencyResponseDto mainPhone;
+    
     private int sectorCount; 
 }

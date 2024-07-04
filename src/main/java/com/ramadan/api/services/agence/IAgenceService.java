@@ -27,7 +27,7 @@ public interface IAgenceService {
 
 	AgenceResponseDto saveAgence(AgenceRequestDto agenceRequestDto) throws APIErrorException;
 
-	AgenceResponseDto updateEntity(String uuid, AgenceUpdateDto requestDto) throws ApiKeyException;
+	AgenceResponseDto updateEntity(String uuid, AgenceUpdateDto requestDto) throws  APIErrorException;
 
 	void deleteAgence(String uuid) throws APIErrorException;
 
