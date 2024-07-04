@@ -1,13 +1,18 @@
 package com.ramadan.api.entity.stock.deposit;
 
+import java.math.BigDecimal;
+
 import org.hibernate.annotations.Where;
 
+import com.ramadan.api.entity.agence.AdresseAgency;
 import com.ramadan.api.entity.global.BaseModel;
 import com.ramadan.api.helpers.Utils;
 
 import jakarta.annotation.PreDestroy;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PostPersist;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreRemove;
@@ -26,12 +31,15 @@ import lombok.NoArgsConstructor;
 public class LocationGPSAddressDeposit extends BaseModel {
 
 	private static final long serialVersionUID = 1L;
+	@ManyToOne
+	@JoinColumn(name = "address_deposit_id")
+	private AddressDeposit adresseDeposit;
 
 	@Column(name = "gps_latitude", nullable = false)
-	private double gpsLatitude;
+	private BigDecimal gpsLatitude;
 
 	@Column(name = "gps_longitude", nullable = false)
-	private double gpsLongitude;
+	private BigDecimal gpsLongitude;
 
 	@PostPersist
 	public void postPersist() {

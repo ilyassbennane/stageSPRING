@@ -57,7 +57,7 @@ import jakarta.validation.Valid;
 		@ApiResponse(responseCode = "501", description = "Requested functionality is not supported by the server.", content = {
 				@Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)) }) })
 @RequestMapping("${URL-BASE}/agency")
-@Tag(name = "Agency Management Controller", description = "APIs - Create Agency, Update Agency, Get Agency, Get All Agencies, Delete Agency, Agencies-Company-list, UpdateAgencyCompany")
+@Tag(name = "Agency Management Controller", description = "APIs - Create Agency, Update Agency, Get Agency, Get All Agencies, Delete Agency, Agencies-Company-list")
 public class AgencyController {
 
 	@Autowired
@@ -72,7 +72,7 @@ public class AgencyController {
 	public ResponseEntity<AgenceResponseDto> createAgence(@Valid @RequestBody AgenceRequestDto agenceRequest)
 			throws APIErrorException {
 		AgenceResponseDto agenceResponseDto = agenceService.saveAgence(agenceRequest);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(agenceResponseDto);
 	}
 
 	@Operation(summary = "Add Addresses to an Agency", description = "Add Addresses Agency REST API to add an address to an Agency")

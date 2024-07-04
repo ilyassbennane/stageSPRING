@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO for {@link com.ramadan.api.entity.agence.Agency}
+ * DTO for {@link com.ramadan.api.entity.agence.ADepotResponseDtogency}
  */
 @Data
 @NoArgsConstructor

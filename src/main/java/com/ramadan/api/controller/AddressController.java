@@ -34,7 +34,7 @@ import jakarta.validation.Valid; //add validators
  * Controller for handling address-related requests.
  * Provides endpoints for managing addresses, including retrieval, update, and deletion of address details.
  */
-@RestController
+//@RestController
 @ApiResponses(value = {
         @ApiResponse(responseCode = "401", description = "Authentication is required to access the resource.", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
